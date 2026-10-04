@@ -1,0 +1,6 @@
+{
+  "name": "Dev Tools",
+  "description": "Comprehensive suite for developers featuring device personalization tools, malware & virus scanning, and on-the-go compilers for Java, Python, and C++.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

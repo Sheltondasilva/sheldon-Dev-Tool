@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Dev Tools</string>
+    <string name="tab_personalize">Personalize</string>
+    <string name="tab_scanner">Security</string>
+    <string name="tab_compiler">Code Studio</string>
+    <string name="title_personalize">Device Personalization</string>
+    <string name="subtitle_personalize">Themes, wallpapers &amp; developer aesthetics</string>
+    <string name="title_security">Threat Scanner &amp; Cleaner</string>
+    <string name="subtitle_security">Storage malware analysis &amp; system cleanup</string>
+    <string name="title_compiler">Developer Compilers</string>
+    <string name="subtitle_compiler">Interactive Java, Python &amp; C++ IDE</string>
+    <string name="btn_run_code">Run Code</string>
+    <string name="btn_scan_now">Scan Storage</string>
+    <string name="btn_clean_threats">Clean Malwares</string>
+    <string name="btn_set_wallpaper">Set Wallpaper</string>
+</resources>
