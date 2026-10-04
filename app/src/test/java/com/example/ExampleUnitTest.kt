@@ -78,4 +78,49 @@ int main() {
         val en = com.example.model.LanguageManager.getStrings(com.example.model.AppLanguage.ENGLISH)
         assertEquals("Settings", en.tabSettings)
     }
+
+    @Test
+    fun testPerformanceMetricsDefaults() {
+        val metrics = com.example.ui.monitor.PerformanceMetrics(
+            cpuUsagePct = 25,
+            ramUsedMb = 2048,
+            ramTotalMb = 4096,
+            ramUsagePct = 50,
+            batteryPct = 85,
+            batteryTempC = 28.5f
+        )
+        assertEquals(25, metrics.cpuUsagePct)
+        assertEquals(50, metrics.ramUsagePct)
+        assertEquals(85, metrics.batteryPct)
+        assertEquals(28.5f, metrics.batteryTempC, 0.01f)
+    }
+
+    @Test
+    fun testPerformanceCsvFormatting() {
+        val record = com.example.ui.monitor.PerformanceLogRecord(
+            timestamp = 1700000000000L,
+            timeFormatted = "2026-10-04 12:00:00",
+            cpuUsagePct = 34,
+            cpuCores = 8,
+            activeThreads = 15,
+            ramUsedMb = 2048,
+            ramTotalMb = 4096,
+            ramUsagePct = 50,
+            jvmHeapUsedMb = 32,
+            batteryPct = 90,
+            batteryVoltageMv = 4150,
+            batteryTempC = 27.5f,
+            batteryStatus = "Discharging",
+            batteryPlugType = "Unplugged",
+            rxSpeedKbps = 120.5f,
+            txSpeedKbps = 15.0f
+        )
+        val csvHeader = "Timestamp,DateTime,CPU_Usage_Percent,CPU_Cores,Active_Threads,RAM_Used_MB,RAM_Total_MB,RAM_Usage_Percent,JVM_Heap_Used_MB,Battery_Percent,Battery_Voltage_mV,Battery_Temp_C,Battery_Status,Battery_Plug_Type,Network_Rx_KBps,Network_Tx_KBps"
+        val csvRow = "${record.timestamp},\"${record.timeFormatted}\",${record.cpuUsagePct},${record.cpuCores},${record.activeThreads},${record.ramUsedMb},${record.ramTotalMb},${record.ramUsagePct},${record.jvmHeapUsedMb},${record.batteryPct},${record.batteryVoltageMv},${record.batteryTempC},\"${record.batteryStatus}\",\"${record.batteryPlugType}\",${record.rxSpeedKbps},${record.txSpeedKbps}"
+        
+        assertTrue(csvHeader.contains("CPU_Usage_Percent"))
+        assertTrue(csvHeader.contains("Battery_Temp_C"))
+        assertTrue(csvRow.contains("2026-10-04 12:00:00"))
+        assertTrue(csvRow.contains("34,8,15,2048"))
+    }
 }

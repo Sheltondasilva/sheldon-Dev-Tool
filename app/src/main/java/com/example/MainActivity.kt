@@ -4,27 +4,30 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BuildCircle
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.data.local.DevDatabase
 import com.example.model.LocalizedStrings
 import com.example.ui.compiler.CompilerScreen
 import com.example.ui.compiler.CompilerViewModel
-import com.example.ui.hardware.DeviceTestScreen
 import com.example.ui.hardware.DeviceTestViewModel
+import com.example.ui.hardware.DiagnosticsContainerScreen
+import com.example.ui.monitor.PerformanceMonitorViewModel
 import com.example.ui.personalize.PersonalizationScreen
 import com.example.ui.personalize.PersonalizationViewModel
 import com.example.ui.security.SecurityScreen
@@ -51,6 +54,9 @@ class MainActivity : ComponentActivity() {
 
             val personalizeVm: PersonalizationViewModel = viewModel(
                 factory = PersonalizationViewModel.Factory(context)
+            )
+            val monitorVm: PerformanceMonitorViewModel = viewModel(
+                factory = PerformanceMonitorViewModel.Factory(context)
             )
             val deviceTestVm: DeviceTestViewModel = viewModel(
                 factory = DeviceTestViewModel.Factory(context)
@@ -98,8 +104,9 @@ class MainActivity : ComponentActivity() {
                             viewModel = personalizeVm,
                             modifier = modifier
                         )
-                        DevTab.TESTS -> DeviceTestScreen(
-                            viewModel = deviceTestVm,
+                        DevTab.TESTS -> DiagnosticsContainerScreen(
+                            monitorViewModel = monitorVm,
+                            deviceTestViewModel = deviceTestVm,
                             modifier = modifier
                         )
                         DevTab.SECURITY -> SecurityScreen(
@@ -138,11 +145,34 @@ fun DevToolsTopBar(
 
     TopAppBar(
         title = {
-            Text(
-                text = "Dev Tools • $tabTitle",
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.titleMedium
-            )
+            androidx.compose.foundation.layout.Row(
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+            ) {
+                com.example.ui.common.DevToolsLogoMark(size = 28.dp)
+                androidx.compose.foundation.layout.Spacer(Modifier.width(10.dp))
+                androidx.compose.foundation.layout.Row(
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "dev",
+                        fontWeight = FontWeight.Black,
+                        fontSize = 17.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = " tools",
+                        fontWeight = FontWeight.Black,
+                        fontSize = 17.sp,
+                        color = com.example.ui.common.BrandElectricBlue
+                    )
+                    Text(
+                        text = " • $tabTitle",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                    )
+                }
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -171,7 +201,7 @@ fun DevToolsBottomBar(
         NavigationBarItem(
             selected = currentTab == DevTab.TESTS,
             onClick = { onTabSelected(DevTab.TESTS) },
-            icon = { Icon(Icons.Default.BuildCircle, contentDescription = "Hardware Test") },
+            icon = { Icon(Icons.Default.Speed, contentDescription = "Performance & Diagnostics") },
             label = { Text(loc.tabDeviceTest, maxLines = 1) },
             modifier = Modifier.testTag("nav_tests")
         )

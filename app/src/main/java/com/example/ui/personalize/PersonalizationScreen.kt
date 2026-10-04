@@ -59,6 +59,11 @@ fun PersonalizationScreen(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
+        // App Brand Header with Logo
+        item {
+            com.example.ui.common.DevToolsBrandHeader()
+        }
+
         // Section: Hero / Header
         item {
             HeroHeaderCard(metrics = state.deviceMetrics, onOpenDevSettings = { viewModel.openDevSettings() })
